@@ -48,7 +48,12 @@ class Kit:
    self.send('/sl/0/register_auto_update',name,20,self.url,'/update')
    self.send('/sl/0/get',name,self.url,'/update')
   self.hit('pause_on') if SESSION.is_file() else None
-  self.ready=True;FLAG.write_text(str(ROOT)+'\n');print('SooperLooper pronto',flush=True)
+  self.ready=True;FLAG.write_text(str(ROOT)+'\n')
+  # Compatibility for an already-running central driver from the previous name.
+  legacy=RUNTIME/'tsma-kit.active'
+  if not legacy.exists():
+   legacy.unlink(missing_ok=True);legacy.symlink_to(FLAG.name)
+  print('SooperLooper pronto',flush=True)
  def action(self,action):
   if action=='save':self.save();return
   if not self.ready or self.state<0:print('Looper non ancora pronto',flush=True);return
