@@ -1,4 +1,4 @@
-TSMA Kit 1.0.10
+TSMega-kit 1.0.10
 
 - Show the last pedal effect's actual on/off state read directly from ToneLib GFX: green `● Acceso` or gray `○ Spento`, alongside its name, bank and position. Unavailable states remain neutral.
 - Fix missing effect descriptions after reboot when the private Xephyr display reports Num Lock, Caps Lock or Scroll Lock as held. Real typing and held modifiers still suspend clipboard queries.
@@ -8,7 +8,7 @@ Validation: 49 offline regression tests, GTK checks for on/off/unknown button st
 
 Downloads: self-contained x86_64 AppImage, DEB and RPM, corresponding runtime sources and SHA-256 checksums. Requires glibc 2.35+, systemd user services, and X11 or a Wayland desktop with XWayland enabled. ToneLib is downloaded separately from its official vendor. No personal license, registration or backing-track audio is included.
 
-TSMA Kit 1.0.9
+TSMega-kit 1.0.9
 
 - Fix startup crashes on Wayland desktops: the kit window selects XWayland before GTK initializes, so the embedded Xephyr display receives X11 window IDs. X11 desktop sessions remain supported.
 - Show the current effect name beside its bank and position, for example `Banco: 5–8 · Effetto: 1 → 5 · Spring Rvb`, when ToneLib's native preset summary is available.

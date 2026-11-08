@@ -31,7 +31,7 @@ def guard_available():
 
 class PedalCheck(Gtk.Window):
     def __init__(self, parent=None):
-        super().__init__(title='TSMA Kit — Pedal Check', transient_for=parent)
+        super().__init__(title='TSMega-kit — Pedal Check', transient_for=parent)
         self.set_position(Gtk.WindowPosition.CENTER_ON_PARENT if parent is not None else Gtk.WindowPosition.CENTER)
         self.set_default_size(900, 700)
         self.set_border_width(12)

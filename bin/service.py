@@ -10,8 +10,8 @@ CONFIG=json.loads((ROOT/'config/kit.json').read_text())
 RUNTIME=Path(os.environ.get('XDG_RUNTIME_DIR','/tmp'))/f'jack-hooks-{os.getuid()}'
 SESSION=ROOT/'state/looper.slsess'
 SOCKET=RUNTIME/'tsma-looper.sock'
-FLAG=RUNTIME/'tsma-kit.active'
-STATUS=RUNTIME/'tsma-kit.status.json'
+FLAG=RUNTIME/'tsmega-kit.active'
+STATUS=RUNTIME/'tsmega-kit.status.json'
 
 class Kit:
  def __init__(self):
@@ -102,7 +102,7 @@ class Kit:
 
 if __name__=='__main__':
  RUNTIME.mkdir(mode=0o700,exist_ok=True);(ROOT/'state').mkdir(exist_ok=True);(ROOT/'log').mkdir(exist_ok=True)
- with open(RUNTIME/'tsma-kit.lock','w') as lock:
+ with open(RUNTIME/'tsmega-kit.lock','w') as lock:
   try:fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
   except BlockingIOError:raise SystemExit(0)
   kit=Kit();signal.signal(signal.SIGTERM,lambda *_:setattr(kit,'running',False));signal.signal(signal.SIGINT,lambda *_:setattr(kit,'running',False));kit.run()

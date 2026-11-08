@@ -7,7 +7,7 @@ def install_profile(root,home,force=False):
  source=root/'config/Gadwin';target=home/'.config/Gadwin'
  if (target/'ToneLib GFX').exists() and not force:return False
  if target.exists() and force:
-  backup=home/'.local/share/tsma-kit/backups'/time.strftime('%Y%m%d-%H%M%S')
+  backup=home/'.local/share/tsmega-kit/backups'/time.strftime('%Y%m%d-%H%M%S')
   backup.parent.mkdir(parents=True,exist_ok=True);shutil.copytree(target,backup)
  target.mkdir(parents=True,exist_ok=True)
  for name in ('ToneLib GFX','Shared'):

@@ -1,6 +1,6 @@
 #!/bin/bash
 # JACK/QjackCtl and Ardour remain separate. The service saves the loop on exit.
 systemctl --user stop tsma-gui.service 2>/dev/null
-systemctl --user stop tsma-looper-gui.service tsma-tonelib.service tsma-kit.service 2>/dev/null
+systemctl --user stop tsma-looper-gui.service tsma-tonelib.service tsmega-kit.service 2>/dev/null
 systemctl --user stop jack-tsmega.service tsma-jack-drivers.service 2>/dev/null
 exit 0

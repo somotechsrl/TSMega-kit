@@ -35,7 +35,7 @@ def on_display(name,display):
 def main():
  required=['jack_control','sooperlooper','slgui','systemd-run','jack_lsp','jack_samplerate','zita-a2j','zita-j2a','Xephyr','openbox','xauth','xprop','wmctrl']
  missing=[x for x in required if not shutil.which(x)]
- if missing:raise RuntimeError('Esegui prima install-tsma. Programmi mancanti: '+', '.join(missing))
+ if missing:raise RuntimeError('Esegui prima install-tsmega. Programmi mancanti: '+', '.join(missing))
  # Prepare optional Ardour integration only while the DAW is closed.
  from midimix_setup import prepare
  prepare(Path(os.environ.get('XDG_CONFIG_HOME') or HOME/'.config')/'ardour8')
@@ -80,9 +80,9 @@ def main():
  if not ts_live():
   owner=owner_file.read_text().strip()
   unit('jack-tsmega',driver_env+['--setenv=JACK_DRIVERS_OWNER_PID='+owner,str(jackdir/'Drivers.d/TSMEGA')])
- unit('tsma-kit',['--property=Restart=on-failure','--property=RestartSec=2',PYTHON,str(ROOT/'bin/service.py')])
+ unit('tsmega-kit',['--property=Restart=on-failure','--property=RestartSec=2',PYTHON,str(ROOT/'bin/service.py')])
  def looper_ready():
-  try:return json.loads((RUNTIME/'tsma-kit.status.json').read_text()).get('ready',False)
+  try:return json.loads((RUNTIME/'tsmega-kit.status.json').read_text()).get('ready',False)
   except (OSError,ValueError):return False
  wait_for(looper_ready,15,'SooperLooper non è pronto: controlla log/engine.log.')
  unit('tsma-gui',[PYTHON,str(ROOT/'bin/gui.py')])
@@ -102,14 +102,14 @@ def main():
   wait_for(lambda:bind_midi(HOME),8,'Adattatore MIDI non pronto.')
   tonelib=ROOT/'vendor/ToneLib-GFX'
   if not tonelib.exists():tonelib=Path(shutil.which('ToneLib-GFX') or '/nonexistent')
-  if not tonelib.exists():raise RuntimeError('ToneLib GFX assente: esegui install-tsma.')
+  if not tonelib.exists():raise RuntimeError('ToneLib GFX assente: esegui install-tsmega.')
   unit('tsma-tonelib',gui_env+[str(tonelib)])
  wait_for(lambda:process('ToneLib-GFX'),8,'ToneLib non è partito.')
  # Connect the UI to the dedicated engine; never let it spawn another one.
  if process('slgui') and not on_display('slgui',gui['display']):run('systemctl','--user','stop','tsma-looper-gui.service',check=False)
  if not on_display('slgui',gui['display']):unit('tsma-looper-gui',gui_env+['--setenv=GTK_MODULES='+str(ROOT/'vendor/slgui-lock.so'),shutil.which('slgui'),'-N','-n','-H','127.0.0.1','-P',str(CONFIG['osc_port']),'-X','0:0'])
  print('Kit avviato: ToneLib → SooperLooper → Tone Shifter; traccia TSMA-Kit se presente.')
- run('notify-send','--app-name=TSMA Kit','--icon='+str(ROOT/'icona.svg'),'TSMA Kit','ToneLib e SooperLooper pronti. La traccia TSMA-Kit si ricollega automaticamente.',check=False)
+ run('notify-send','--app-name=TSMega-kit','--icon='+str(ROOT/'icona.svg'),'TSMega-kit','ToneLib e SooperLooper pronti. La traccia TSMA-Kit si ricollega automaticamente.',check=False)
 
 if __name__=='__main__':
  (ROOT/'log').mkdir(exist_ok=True);RUNTIME.mkdir(mode=0o700,parents=True,exist_ok=True)
@@ -119,5 +119,5 @@ if __name__=='__main__':
   try:main()
   except Exception as exc:
    print(str(exc),file=sys.stderr)
-   subprocess.run(['notify-send','-u','critical','TSMA-Kit',str(exc)])
+   subprocess.run(['notify-send','-u','critical','TSMega-kit',str(exc)])
    raise SystemExit(1)

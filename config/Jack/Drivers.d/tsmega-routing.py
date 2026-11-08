@@ -21,7 +21,7 @@ def graph():
   return json.loads(data)['ports']
 
 def plan(g, kit=None, tonelib=True, track='TSMA-Kit', ardour=False):
- if kit is None:kit=(STATE/'tsma-kit.active').exists()
+ if kit is None:kit=(STATE/'tsmega-kit.active').exists()
  wanted=[];owned=[]
  def edge(source,dest):
   if dest in g:

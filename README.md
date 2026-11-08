@@ -1,22 +1,14 @@
-# TSMA Kit
+# TSMega-kit
 
-TSMA Kit turns an Ubuntu PC into a standalone guitar rig using a **Tone Shifter pedalboard/audio interface, ToneLib GFX and SooperLooper**. It is designed for practice and live performance, with hardware control of presets, effects and loops.
+TSMega-kit turns an Ubuntu PC into a standalone guitar rig using a **Tone Shifter pedalboard/audio interface, ToneLib GFX and SooperLooper**. It is designed for practice and live performance, with hardware control of presets, effects and loops.
 
 The current audio and MIDI profile was tested with a **MeloAudio Tone Shifter Mega** and an **M-Wave Chocolate connected over USB**. Other Tone Shifter models need their audio ports and MIDI messages checked before using this profile.
 
-## Downloads
+## Local packages and installation
 
-Version 1.0.9 fixes startup on **Wayland desktops** by selecting XWayland for the embedded application window, while retaining support for **X11 sessions**. The bank/effect indicator now also shows the effect name from ToneLib's current chain when available, for example **Banco: 5–8 · Effetto: 1 → 5 · Spring Rvb**. It retains automatic drum playback, saved window size/position, the **Check** pedal utility and the USB audio fix. All 128 positions are displayed; ToneLib supports native assignment for the first eight effects, and higher positions remain marked **non assegnato**. The original 1.0.0 audio bundle has been withdrawn.
+Version **1.0.11** renames the application to **TSMega-kit**, including its repository, launchers and user-data directory. The Ardour destination remains **TSMA-Kit**. Keyboard focus and pointer bounds are corrected for embedded and maximized windows.
 
-All packages below contain the **same self-contained runtime**, including SooperLooper, JACK, the performance GUI and their libraries. They do not replace the system's SooperLooper installation.
-
-| Format | Target | Download |
-|---|---|---|
-| AppImage | Portable x86_64 Linux bundle | [TSMA Kit AppImage](https://github.com/somotechsrl/TSMA-Kit/releases/download/v1.0.9/TSMA-Kit-1.0.9-x86_64.AppImage) |
-| DEB | Ubuntu, Linux Mint and Debian, amd64 | [TSMA Kit .deb](https://github.com/somotechsrl/TSMA-Kit/releases/download/v1.0.9/tsma-kit_1.0.9_amd64.deb) |
-| RPM | Fedora, x86_64 | [TSMA Kit .rpm](https://github.com/somotechsrl/TSMA-Kit/releases/download/v1.0.9/tsma-kit-1.0.9-1.x86_64.rpm) |
-| Checksums | SHA-256 verification | [SHA256SUMS](https://github.com/somotechsrl/TSMA-Kit/releases/download/v1.0.9/SHA256SUMS) |
-| Runtime source | Corresponding sources for the bundled free components | [Runtime sources](https://github.com/somotechsrl/TSMA-Kit/releases/download/v1.0.9/TSMA-Kit-1.0.9-runtime-sources.tar.gz) |
+Build AppImage, DEB and RPM locally using `packaging/README.md`. The generated files are in `dist/`: `TSMega-kit-1.0.11-x86_64.AppImage`, `tsmega-kit_1.0.11_amd64.deb` and `tsmega-kit-1.0.11-1.x86_64.rpm`. The sources are versioned on GitHub; the workflows run only when manually requested.
 
 A 64-bit desktop with **glibc 2.35 or newer**, systemd user services, D-Bus and X11/XWayland is required. This covers Ubuntu 22.04+, Mint 21+, Debian 12+ and recent Fedora releases. Runtime checks have passed on Ubuntu 22.04/24.04, Debian 12 and Fedora 44; audio hardware and live latency still need validation on each PC. ARM and older glibc releases are not supported.
 
@@ -24,21 +16,21 @@ On Wayland desktops, the kit window automatically uses XWayland: its embedded Xe
 
 ```bash
 # Ubuntu / Mint / Debian
-sudo apt install ./tsma-kit_1.0.9_amd64.deb
+sudo apt install ./tsmega-kit_1.0.11_amd64.deb
 
 # Fedora
-sudo dnf install ./tsma-kit-1.0.9-1.x86_64.rpm
+sudo dnf install ./tsmega-kit-1.0.11-1.x86_64.rpm
 
 # Portable bundle
-chmod +x TSMA-Kit-1.0.9-x86_64.AppImage
-./TSMA-Kit-1.0.9-x86_64.AppImage
+chmod +x TSMega-kit-1.0.11-x86_64.AppImage
+./TSMega-kit-1.0.11-x86_64.AppImage
 ```
 
-The native packages add an application-menu entry and a desktop shortcut. For another desktop user, the shortcut is created at login or with `tsma-kit --install-desktop`. The AppImage creates its shortcut on first use. If FUSE is unavailable, run the AppImage with `--appimage-extract-and-run`; native packages use an extraction cache and do not require FUSE.
+The native packages add an application-menu entry and a desktop shortcut. For another desktop user, the shortcut is created at login or with `tsmega-kit --install-desktop`. The AppImage creates its shortcut on first use. If FUSE is unavailable, run the AppImage with `--appimage-extract-and-run`; native packages use an extraction cache and do not require FUSE.
 
 **No author license, registration, credentials or personal backing tracks are included.** On first use, if ToneLib GFX is not already installed, the kit offers to download the official trial directly from tonelib.net. Each user can use that trial or activate it with their own license. Internet is only needed for that initial download; regular use can be offline.
 
-User data lives in **`~/.local/share/tsma-kit/kit`** (or `$XDG_DATA_HOME/tsma-kit/kit`). Presets, loop audio and local backing tracks remain separate from the installed package and are preserved across upgrades. `TSMA_KIT_HOME` can select another writable data folder.
+User data lives in **`~/.local/share/tsmega-kit/kit`** (or `$XDG_DATA_HOME/tsmega-kit/kit`). Presets, loop audio and local backing tracks remain separate from the installed package and are preserved across upgrades. `TSMA_KIT_HOME` can select another writable data folder.
 
 ### Local drum backing tracks
 
@@ -48,7 +40,7 @@ The importer extracts audio from local videos, keeps the originals and writes co
 
 ```bash
 # Installed package: import your own local collection
- tsma-kit --import-drums "$HOME/Desktop/GUITAR/Backtracks/Drums"
+ tsmega-kit --import-drums "$HOME/Desktop/GUITAR/Backtracks/Drums"
 
 # Source checkout
 ./import-drums /path/to/drum-videos ./BackingTracks/Drums
@@ -62,7 +54,7 @@ FLAC files are loaded directly, without temporary WAV conversion. The generated 
 Guitar → Tone Shifter input L → ToneLib GFX → SooperLooper → Tone Shifter outputs
 ```
 
-The launcher starts JACK if needed and opens a single **TSMA Kit** window: **ToneLib on top, SooperLooper below**, aligned to the same width without internal title bars. The window can be moved, resized and minimized as one application. Keyboard focus follows entry into the embedded applications while the kit is active; header controls, dialogs and other applications keep their own focus. After resizing or maximizing, the private display refreshes its pointer limits so clicks remain aligned throughout the enlarged window. On closing, its actual size and position are saved in `$XDG_CONFIG_HOME/tsma-kit/window.json` (default: `~/.config/tsma-kit/window.json`) and restored as a normal window at the next launch, even if it was maximized when closed. If a monitor is disconnected, the window is brought back onto an available screen.
+The launcher starts JACK if needed and opens a single **TSMega-kit** window: **ToneLib on top, SooperLooper below**, aligned to the same width without internal title bars. The window can be moved, resized and minimized as one application. Keyboard focus follows entry into the embedded applications while the kit is active; header controls, dialogs and other applications keep their own focus. After resizing or maximizing, the private display refreshes its pointer limits so clicks remain aligned throughout the enlarged window. On closing, its actual size and position are saved in `$XDG_CONFIG_HOME/tsmega-kit/window.json` (default: `~/.config/tsmega-kit/window.json`) and restored as a normal window at the next launch, even if it was maximized when closed. If a monitor is disconnected, the window is brought back onto an available screen.
 
 ToneLib handles the sound; SooperLooper records, plays and overdubs loops. The kit reconnects its audio and MIDI paths when devices or applications return. It uses 48 kHz audio, a 256-frame JACK buffer and one stereo loop with up to 300 seconds of memory per channel.
 
@@ -70,11 +62,11 @@ ToneLib handles the sound; SooperLooper records, plays and overdubs loops. The k
 
 The kit also displays a **live MIDImix fader legend**: eight numbered cells show the Ardour track/bus controlled by each fader. Bank Left/Right updates the legend immediately; track renames, visibility and ordering refresh from the running Ardour session within one second. The last moved fader is highlighted briefly. Each cell also contains two horizontal bars: **Vol** shows the actual fader gain in dB, and **VU** shows Ardour’s audio peak level, refreshing up to 25 times per second (green, amber above −6 dB, red at 0 dB). A **MUTE** badge lights up when the corresponding Ardour strip is muted. The volume bars have a **0 dB unity mark**: physical track faders snap to exactly 0 dB within ±0.45 dB and release beyond ±0.9 dB, preventing jitter while preserving native MIDI control outside the detent. The master fader retains its existing assignment.
 
-Setup is automatic for **Ardour 8**: TSMA Kit installs its `Akai MidiMix TSMA Live` map and enables OSC while Ardour is closed, keeping a backup of the original preferences at `~/.config/ardour8/config.before-tsma-midimix`. If Ardour is already open during the first setup, the kit waits for it to close instead of interrupting a session. The next launch uses the prepared configuration; no manual MIDI/OSC setup is needed. The OSC port defaults to 3819 (`TSMA_ARDOUR_OSC_PORT` can override it).
+Setup is automatic for **Ardour 8**: TSMega-kit installs its `Akai MidiMix TSMA Live` map and enables OSC while Ardour is closed, keeping a backup of the original preferences at `~/.config/ardour8/config.before-tsma-midimix`. If Ardour is already open during the first setup, the kit waits for it to close instead of interrupting a session. The next launch uses the prepared configuration; no manual MIDI/OSC setup is needed. The OSC port defaults to 3819 (`TSMA_ARDOUR_OSC_PORT` can override it).
 
 While connected, the kit owns the MIDImix bank, starting at bank 1. Use the controller's Bank Left/Right buttons or the panel’s ‹/› buttons to change it. The proxy forwards faders, mute/solo/record buttons and other MIDI messages unchanged to Generic MIDI; bank buttons become absolute bank selections, and the unity detent sets exactly 0 dB only while a physical track fader is being moved near unity. Existing MIDI Learn controls are retained. Closing the kit, losing OSC or unplugging the controller restores its original direct JACK connection; the worker also restores it if the host window process crashes. When names or synchronization are unavailable, the cells show **—** rather than stale assignments. No audio routing or track volume is changed to discover names.
 
-When Ardour is closed, the kit also sends its final stereo mix (guitar, loops and backing tracks) to the existing PipeWire JACK bridge, if available. In OBS, add **Audio Input Capture (PulseAudio)** and select **JACK Source** (`jack_source`). The Tone Shifter listening outputs remain connected. Opening Ardour disconnects this extra feed, including when its session has no `TSMA-Kit` track; closing Ardour restores it automatically. This requires PipeWire's JACK tunnel (`PipeWire:capture_FL/FR`); the kit leaves unrelated PipeWire connections and desktop audio settings intact.
+When Ardour is closed, the kit also sends its final stereo mix (guitar, loops and backing tracks) to the existing PipeWire JACK bridge, if available. In OBS, add **Audio Input Capture (PulseAudio)** and select **JACK Source** (`jack_source`). The Tone Shifter listening outputs remain connected. Opening Ardour disconnects this extra feed, including when its session has no `TSMega-kit` track; closing Ardour restores it automatically. This requires PipeWire's JACK tunnel (`PipeWire:capture_FL/FR`); the kit leaves unrelated PipeWire connections and desktop audio settings intact.
 
 ## Pedal controls
 
@@ -119,8 +111,8 @@ Software mappings live in `config/pedals.conf` inside the writable kit data fold
 
 ```bash
 # Installed DEB/RPM or AppImage: diagnostics without starting the audio kit
-tsma-kit --check
-./TSMA-Kit-VERSION-x86_64.AppImage --check
+tsmega-kit --check
+./TSMega-kit-VERSION-x86_64.AppImage --check
 
 # Source checkout
 ./check-pedals
@@ -136,19 +128,19 @@ The supported installation target is an **Ubuntu/Debian/Mint x86_64 desktop** wi
 2. Clone the repository and run the installer as your normal desktop user:
 
    ```bash
-   git clone https://github.com/somotechsrl/TSMA-Kit.git
-   cd TSMA-Kit
-   ./install-tsma
+   git clone https://github.com/somotechsrl/TSMega-kit.git
+   cd TSMega-kit
+   ./install-tsmega
    ```
 
-   The installer installs missing system dependencies with `sudo`, builds the MIDI adapter and menu lock module, imports the saved ToneLib settings/preset slots, and creates a desktop icon. Existing ToneLib configuration is backed up under `~/.local/share/tsma-kit/backups/` before import. Use `./install-tsma --keep-profile` to retain an existing profile instead.
-3. Connect both pedalboards, plug the guitar into input L, connect headphones or amplification to the Tone Shifter, and open the **TSMA Kit** desktop icon or run:
+   The installer installs missing system dependencies with `sudo`, builds the MIDI adapter and menu lock module, imports the saved ToneLib settings/preset slots, and creates a desktop icon. Existing ToneLib configuration is backed up under `~/.local/share/tsmega-kit/backups/` before import. Use `./install-tsmega --keep-profile` to retain an existing profile instead.
+3. Connect both pedalboards, plug the guitar into input L, connect headphones or amplification to the Tone Shifter, and open the **TSMega-kit** desktop icon or run:
 
    ```bash
-   ./start-tsma
+   ./start-tsmega
    ```
 
-The folder can be moved. Stop the kit before moving it and rerun the installer to update the desktop icon. On another Linux distribution, install the dependencies yourself and use `./install-tsma --no-deps`. ARM is not supported by the tested ToneLib application.
+The folder can be moved. Stop the kit before moving it and rerun the installer to update the desktop icon. On another Linux distribution, install the dependencies yourself and use `./install-tsmega --no-deps`. ARM is not supported by the tested ToneLib application.
 
 ## Performance interface and saved data
 
@@ -156,7 +148,7 @@ The SooperLooper menu is hidden and disabled, and its menu accelerators are remo
 
 - `save-loop` requests a loop save. The engine also saves after recording/overdub finishes and when pausing; a saved loop is restored paused.
 - `save-config` exports the current preset slots and musical settings into this source tree, excluding personal paths, recordings and registration files. Review preset/IR content before publishing further changes.
-- `stop-tsma`, or closing the container window, stops the kit gracefully. JACK and external applications remain separate.
+- `stop-tsmega`, or closing the container window, stops the kit gracefully. JACK and external applications remain separate.
 - `state/` holds local SooperLooper session/audio data; `log/` holds diagnostics. Both are ignored by Git.
 
 The repository includes the saved preset parameter slots and MIDI mappings. **Recorded loops, registration credentials, proprietary binaries and external impulse-response audio are excluded.** Presets that use external IRs need those IRs installed locally. The existing private portable kit retains the full personal configuration.

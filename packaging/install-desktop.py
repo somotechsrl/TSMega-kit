@@ -12,8 +12,8 @@ if os.geteuid()==0:
  raise SystemExit(0)
 try:desktop=Path(subprocess.check_output(['xdg-user-dir','DESKTOP'],text=True).strip())
 except (OSError,subprocess.CalledProcessError):desktop=Path.home()/'Desktop'
-desktop.mkdir(parents=True,exist_ok=True);target=desktop/'TSMA-Kit.desktop'
-shutil.copy2('/usr/share/applications/tsma-kit.desktop',target);target.chmod(0o755)
+desktop.mkdir(parents=True,exist_ok=True);target=desktop/'TSMega-kit.desktop'
+shutil.copy2('/usr/share/applications/tsmega-kit.desktop',target);target.chmod(0o755)
 if shutil.which('gio'):
  env=os.environ.copy();env.pop('GIO_MODULE_DIR',None)
  subprocess.run(['gio','set',str(target),'metadata::trusted','true'],env=env,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)

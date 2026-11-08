@@ -2,7 +2,7 @@
 """Resolve merged-/usr library owners and complete runtime source/license metadata."""
 import json,shutil,subprocess
 from pathlib import Path
-BASE=Path('/src/dist/TSMA-Kit.AppDir/usr/share/tsma-kit');APP=BASE.parents[2]
+BASE=Path('/src/dist/TSMega-kit.AppDir/usr/share/tsmega-kit');APP=BASE.parents[2]
 file=BASE/'runtime-packages.json';old=json.loads(file.read_text());packages={row[0] for row in old};paths=[]
 for lib in (APP/'usr/lib/x86_64-linux-gnu').glob('*.so*'):
  paths.extend(['/usr/lib/x86_64-linux-gnu/'+lib.name,'/lib/x86_64-linux-gnu/'+lib.name])

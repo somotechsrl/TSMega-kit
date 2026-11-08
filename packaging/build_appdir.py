@@ -2,24 +2,24 @@
 """Build the AppDir inside an Ubuntu 22.04 runtime container."""
 import hashlib,json,os,re,shutil,subprocess,sys
 from pathlib import Path
-SOURCE=Path('/src');OUTPUT=SOURCE/'dist';APP=OUTPUT/'TSMA-Kit.AppDir';VERSION=(SOURCE/'VERSION').read_text().strip()
+SOURCE=Path('/src');OUTPUT=SOURCE/'dist';APP=OUTPUT/'TSMega-kit.AppDir';VERSION=(SOURCE/'VERSION').read_text().strip()
 if APP.exists():shutil.rmtree(APP)
-APP.mkdir(parents=True);BASE=APP/'usr/share/tsma-kit';KIT=BASE/'kit';KIT.mkdir(parents=True)
+APP.mkdir(parents=True);BASE=APP/'usr/share/tsmega-kit';KIT=BASE/'kit';KIT.mkdir(parents=True)
 for name in ('bin','src','config','tests','LICENSES'):
  shutil.copytree(SOURCE/name,KIT/name,ignore=shutil.ignore_patterns('__pycache__','tsmega-midi','*.so','*.reginfo','*.wav','*.flac','*.mp3'))
-for name in ('start-tsma','stop-tsma','install-tsma','save-loop','save-config','import-drums','check-pedals','README.md','NOTICE','icona.svg'):shutil.copy2(SOURCE/name,KIT/name)
+for name in ('start-tsmega','stop-tsmega','install-tsmega','save-loop','save-config','import-drums','check-pedals','README.md','NOTICE','icona.svg'):shutil.copy2(SOURCE/name,KIT/name)
 for name in ('state','log','vendor'):(KIT/name).mkdir(exist_ok=True)
 subprocess.run(['cc','-O2',str(KIT/'config/Jack/Drivers.d/tsmega-midi.c'),'-Wl,-l:libasound.so.2','-o',str(KIT/'config/Jack/Drivers.d/tsmega-midi')],check=True)
 subprocess.run(['cc','-O2','-shared','-fPIC',str(KIT/'src/slgui-lock.c'),'-Wl,-l:libgtk-3.so.0','-Wl,-l:libgobject-2.0.so.0','-Wl,-l:libglib-2.0.so.0','-o',str(KIT/'vendor/slgui-lock.so')],check=True)
 shutil.copy2(SOURCE/'packaging/runtime.py',BASE/'runtime.py');shutil.copy2(SOURCE/'.cache-build/custom-dsp/custom-dsp-builds.json',BASE/'custom-dsp-builds.json');(BASE/'VERSION').write_text(VERSION+'\n');shutil.copy2('/etc/ssl/certs/ca-certificates.crt',BASE/'ca-bundle.crt')
 shutil.copy2(SOURCE/'packaging/AppRun',APP/'AppRun');(APP/'AppRun').chmod(0o755)
-shutil.copy2(SOURCE/'icona.svg',APP/'tsma-kit.svg')
+shutil.copy2(SOURCE/'icona.svg',APP/'tsmega-kit.svg')
 import gi
 gi.require_version('GdkPixbuf','2.0')
 from gi.repository import GdkPixbuf
-GdkPixbuf.Pixbuf.new_from_file_at_scale(str(APP/'tsma-kit.svg'),256,256,True).savev(str(APP/'tsma-kit.png'),'png',[],[])
-(APP/'.DirIcon').symlink_to('tsma-kit.png')
-(APP/'tsma-kit.desktop').write_text('[Desktop Entry]\nType=Application\nName=TSMA Kit\nExec=AppRun\nIcon=tsma-kit\nCategories=AudioVideo;Audio;\nStartupWMClass=TSMA-Kit\n')
+GdkPixbuf.Pixbuf.new_from_file_at_scale(str(APP/'tsmega-kit.svg'),256,256,True).savev(str(APP/'tsmega-kit.png'),'png',[],[])
+(APP/'.DirIcon').symlink_to('tsmega-kit.png')
+(APP/'tsmega-kit.desktop').write_text('[Desktop Entry]\nType=Application\nName=TSMega-kit\nExec=AppRun\nIcon=tsmega-kit\nCategories=AudioVideo;Audio;\nStartupWMClass=TSMega-kit\n')
 seeds=[];owned=set()
 def copy(src,dest=None):
  src=Path(src);dest=Path(dest) if dest else APP/str(src).lstrip('/')

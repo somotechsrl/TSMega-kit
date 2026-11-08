@@ -1,4 +1,4 @@
-"""Compact live fader legend embedded in TSMA Kit."""
+"""Compact live fader legend embedded in TSMega-kit."""
 import json
 import os
 from pathlib import Path
@@ -34,7 +34,7 @@ class MidimixPanel(Gtk.Box):
         self.set_margin_top(3); self.set_margin_bottom(3)
         self.status = Gtk.Label(label='Ardour Midimix · collegamento ad Ardour…', xalign=0)
         self.status.set_ellipsize(Pango.EllipsizeMode.END)
-        self.status.set_tooltip_text('Collegamento automatico ad Ardour. Bank Left/Right sul MIDImix aggiornano le otto corrispondenze.\nLe altre assegnazioni MIDI passano inalterate ad Ardour. Il collegamento originale viene ripristinato quando chiudi TSMA Kit.\nSe Ardour era già aperto alla prima installazione, la configurazione si applica automaticamente dopo la sua chiusura, senza riavviarlo durante il lavoro.')
+        self.status.set_tooltip_text('Collegamento automatico ad Ardour. Bank Left/Right sul MIDImix aggiornano le otto corrispondenze.\nLe altre assegnazioni MIDI passano inalterate ad Ardour. Il collegamento originale viene ripristinato quando chiudi TSMega-kit.\nSe Ardour era già aperto alla prima installazione, la configurazione si applica automaticamente dopo la sua chiusura, senza riavviarlo durante il lavoro.')
         heading = Gtk.Box(spacing=4)
         heading.pack_start(self.status, True, True, 0)
         for title, delta in (('‹', -1), ('›', 1)):
@@ -149,7 +149,7 @@ class MidimixPanel(Gtk.Box):
             while True:
                 data = os.read(self.worker.stdout.fileno(), 65536)
                 if not data:
-                    self.update({'status':'Ardour Midimix · ponte fermo; riapri TSMA Kit per riconnettere','names':['—']*8})
+                    self.update({'status':'Ardour Midimix · ponte fermo; riapri TSMega-kit per riconnettere','names':['—']*8})
                     return False
                 self.buffer += data
                 while b'\n' in self.buffer:

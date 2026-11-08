@@ -19,7 +19,7 @@ class WindowSettings(unittest.TestCase):
 
  def test_persistence_survives_restart_and_replaces_previous_settings(self):
   with tempfile.TemporaryDirectory() as folder:
-   path=Path(folder)/'tsma-kit/window.json'
+   path=Path(folder)/'tsmega-kit/window.json'
    self.assertIsNone(load_geometry(path))
    save_geometry(path,self.geometry)
    self.assertEqual(load_geometry(path),self.geometry)

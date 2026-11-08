@@ -2,9 +2,9 @@
 """Writable user data and first-run setup for the bundled application."""
 import argparse,fcntl,json,os,shutil,subprocess,sys,tarfile,tempfile,threading,time,urllib.request
 from pathlib import Path
-BUNDLE=Path(os.environ['TSMA_BUNDLE_ROOT']);BASE=BUNDLE/'usr/share/tsma-kit'
+BUNDLE=Path(os.environ['TSMA_BUNDLE_ROOT']);BASE=BUNDLE/'usr/share/tsmega-kit'
 PAYLOAD=BASE/'kit';VERSION=(BASE/'VERSION').read_text().strip();HOME=Path.home()
-DATA=Path(os.environ.get('XDG_DATA_HOME',HOME/'.local/share'))/'tsma-kit'
+DATA=Path(os.environ.get('XDG_DATA_HOME',HOME/'.local/share'))/'tsmega-kit'
 KIT=Path(os.environ.get('TSMA_KIT_HOME',DATA/'kit')).expanduser()
 RUNTIME=Path(os.environ.get('XDG_RUNTIME_DIR','/tmp'))/f'jack-hooks-{os.getuid()}'
 def run(*args,**kw):return subprocess.run(args,check=True,**kw)
@@ -16,13 +16,13 @@ def desktop_icon():
  try:desktop=Path(subprocess.check_output(['xdg-user-dir','DESKTOP'],text=True).strip())
  except (OSError,subprocess.CalledProcessError):desktop=HOME/'Desktop'
  DATA.mkdir(parents=True,exist_ok=True);desktop.mkdir(parents=True,exist_ok=True)
- executable=Path('/usr/bin/tsma-kit')
+ executable=Path('/usr/bin/tsmega-kit')
  if not executable.exists():executable=Path(os.environ['APPIMAGE']).resolve()
  quote=lambda p:'"'+str(p).replace('\\','\\\\').replace('"','\\"').replace('$','\\$').replace('`','\\`').replace('%','%%')+'"'
- icon=DATA/'tsma-kit.svg';shutil.copy2(PAYLOAD/'icona.svg',icon)
- text=f'[Desktop Entry]\nType=Application\nName=TSMA Kit\nComment=Guitar effects and live looping\nExec={quote(executable)}\nIcon={icon}\nTerminal=false\nCategories=AudioVideo;Audio;\nStartupWMClass=TSMA-Kit\n'
- target=desktop/'TSMA-Kit.desktop';target.write_text(text);target.chmod(0o755)
- applications=Path(os.environ.get('XDG_DATA_HOME',HOME/'.local/share'))/'applications';applications.mkdir(parents=True,exist_ok=True);(applications/'tsma-kit.desktop').write_text(text)
+ icon=DATA/'tsmega-kit.svg';shutil.copy2(PAYLOAD/'icona.svg',icon)
+ text=f'[Desktop Entry]\nType=Application\nName=TSMega-kit\nComment=Guitar effects and live looping\nExec={quote(executable)}\nIcon={icon}\nTerminal=false\nCategories=AudioVideo;Audio;\nStartupWMClass=TSMega-kit\n'
+ target=desktop/'TSMega-kit.desktop';target.write_text(text);target.chmod(0o755)
+ applications=Path(os.environ.get('XDG_DATA_HOME',HOME/'.local/share'))/'applications';applications.mkdir(parents=True,exist_ok=True);(applications/'tsmega-kit.desktop').write_text(text)
  if shutil.which('gio'):subprocess.run(['gio','set',str(target),'metadata::trusted','true'],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
  return target
 def sync_payload():
@@ -77,7 +77,7 @@ def ensure_tonelib():
  dialog.add_buttons('Cancel',Gtk.ResponseType.CANCEL,'Download official trial',Gtk.ResponseType.OK)
  answer=dialog.run();dialog.destroy()
  if answer!=Gtk.ResponseType.OK:raise RuntimeError('ToneLib download cancelled.')
- progress=Gtk.Window(title='TSMA Kit');label=Gtk.Label(label='Downloading ToneLib GFX from tonelib.net…');label.set_margin_top(24);label.set_margin_bottom(24);label.set_margin_start(24);label.set_margin_end(24);progress.add(label);progress.show_all();result=[]
+ progress=Gtk.Window(title='TSMega-kit');label=Gtk.Label(label='Downloading ToneLib GFX from tonelib.net…');label.set_margin_top(24);label.set_margin_bottom(24);label.set_margin_start(24);label.set_margin_end(24);progress.add(label);progress.show_all();result=[]
  def worker():
   try:
    with urllib.request.urlopen('https://tonelib.net/download.php?id=gfx&os=lnx',timeout=60) as response,tempfile.TemporaryFile() as package:
@@ -116,14 +116,14 @@ def self_test():
  from alsa_midi import Sequencer
  if load_profile(PAYLOAD/'config/pedals.conf')!=DEFAULT:raise RuntimeError('Invalid bundled pedal profile.')
  write_message(0,7)
- print('TSMA Kit',VERSION,'bundle checks passed; no audio device was opened.')
+ print('TSMega-kit',VERSION,'bundle checks passed; no audio device was opened.')
 def main():
  parser=argparse.ArgumentParser();parser.add_argument('--self-test',action='store_true');parser.add_argument('--install-desktop',action='store_true');parser.add_argument('--stop',action='store_true');parser.add_argument('--save-loop',action='store_true');parser.add_argument('--import-drums',metavar='SOURCE');parser.add_argument('--check',action='store_true',help='Open pedal verification and programming without starting the audio kit');args=parser.parse_args()
  if args.self_test:self_test();return
- if os.geteuid()==0:raise RuntimeError('Start TSMA Kit as your desktop user, not root.')
+ if os.geteuid()==0:raise RuntimeError('Start TSMega-kit as your desktop user, not root.')
  DATA.mkdir(parents=True,exist_ok=True)
  if args.install_desktop:print(desktop_icon());return
- if args.stop:run(str(KIT/'stop-tsma'));return
+ if args.stop:run(str(KIT/'stop-tsmega'));return
  if args.save_loop:run(str(KIT/'save-loop'));return
  if args.check:
   sync_payload();run(os.environ['TSMA_PYTHON'],str(KIT/'bin/pedal_check.py'));return
@@ -133,12 +133,12 @@ def main():
  with (DATA/'prepare.lock').open('w') as lock:
   fcntl.flock(lock,fcntl.LOCK_EX)
   if active_gui():return
-  sync_payload();ensure_tonelib();desktop_icon();ensure_jack_bus();run(str(KIT/'start-tsma'))
+  sync_payload();ensure_tonelib();desktop_icon();ensure_jack_bus();run(str(KIT/'start-tsmega'))
  # Systemd GUI children must retain access to an AppImage's mounted libraries.
  while active_gui():time.sleep(.5)
 if __name__=='__main__':
  try:main()
  except Exception as exc:
   print(str(exc),file=sys.stderr)
-  if os.environ.get('DISPLAY') and shutil.which('notify-send'):subprocess.run(['notify-send','-u','critical','TSMA Kit',str(exc)])
+  if os.environ.get('DISPLAY') and shutil.which('notify-send'):subprocess.run(['notify-send','-u','critical','TSMega-kit',str(exc)])
   raise SystemExit(1)

@@ -1,9 +1,9 @@
 [Desktop Entry]
 Type=Application
-Name=TSMA Kit
+Name=TSMega-kit
 Comment=Standalone guitar effects and live looping
-Exec=tsma-kit
-Icon=tsma-kit
+Exec=tsmega-kit
+Icon=tsmega-kit
 Terminal=false
 Categories=AudioVideo;Audio;
-StartupWMClass=TSMA-Kit
+StartupWMClass=TSMega-kit

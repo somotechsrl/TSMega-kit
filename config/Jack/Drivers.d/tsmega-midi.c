@@ -129,7 +129,7 @@ static void looper_action(int cc){
  int fd=socket(AF_UNIX,SOCK_DGRAM|SOCK_CLOEXEC,0);if(fd<0)return;
  const char *actions[]={"record_play","overdub","pause","clear"};
  const char *action=actions[cc-80];
- if(sendto(fd,action,strlen(action),0,(struct sockaddr *)&addr,sizeof(addr))<0)fprintf(stderr,"TSMA-Kit looper non disponibile: avviare il kit\n");
+ if(sendto(fd,action,strlen(action),0,(struct sockaddr *)&addr,sizeof(addr))<0)fprintf(stderr,"TSMega-kit looper non disponibile: avviare il kit\n");
  close(fd);
 }
 int main(int argc,char **argv){

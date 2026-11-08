@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-Name=TSMA Kit desktop shortcut
-Exec=tsma-kit --install-desktop
+Name=TSMega-kit desktop shortcut
+Exec=tsmega-kit --install-desktop
 NoDisplay=true
 X-GNOME-Autostart-enabled=true

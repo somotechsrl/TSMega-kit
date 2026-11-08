@@ -15,7 +15,7 @@ from midimix_panel import MidimixPanel
 ROOT=Path(__file__).resolve().parents[1]
 RUNTIME=Path(os.environ.get('XDG_RUNTIME_DIR','/tmp'))/f'jack-hooks-{os.getuid()}'
 STATE=RUNTIME/'tsma-gui.json'
-WINDOW_SETTINGS=Path(os.environ.get('XDG_CONFIG_HOME') or Path.home()/'.config')/'tsma-kit/window.json'
+WINDOW_SETTINGS=Path(os.environ.get('XDG_CONFIG_HOME') or Path.home()/'.config')/'tsmega-kit/window.json'
 
 def call(args,env=None,check=False):
  return subprocess.run(args,env=env,check=check,capture_output=True,text=True,timeout=5)
@@ -55,16 +55,16 @@ class Container:
     rect=display.get_monitor(i).get_workarea();areas.append((rect.x,rect.y,rect.width,rect.height))
    self.geometry=fit_geometry(saved,areas,(x,y,w,h))
   width=self.geometry['width'];height=self.geometry['height']
-  self.window=Gtk.Window(title='TSMA Kit')
+  self.window=Gtk.Window(title='TSMega-kit')
   self.window.get_style_context().add_class('tsma-shell')
   root_info=call(['xwininfo','-root']).stdout
   visual_id=int(re.search(r'Visual: (0x[0-9a-fA-F]+)',root_info)[1],16)
   visual=GdkX11.X11Screen.lookup_visual(Gdk.Screen.get_default(),visual_id)
   self.window.set_visual(visual)
-  self.window.set_wmclass('tsma-kit','TSMA-Kit')
+  self.window.set_wmclass('tsmega-kit','TSMega-kit')
   self.window.set_icon_from_file(str(ROOT/'icona.svg'))
   self.window.set_default_size(width,height);self.window.set_size_request(848,600)
-  header=Gtk.HeaderBar(title='TSMA Kit',show_close_button=True)
+  header=Gtk.HeaderBar(title='TSMega-kit',show_close_button=True)
   self.window.set_titlebar(header)
   self.drums=Gtk.Button(label='Drums');self.drums.set_tooltip_text('Choose and play a drum backing track');self.drums.connect('clicked',self.choose_drums);header.pack_start(self.drums)
   self.drums_process=None
@@ -189,7 +189,7 @@ class Container:
     self.display=f':{number}'
     call(['xauth','-f',str(auth),'add',self.display,'.',secrets.token_hex(16)],check=True)
     xid=self.area.get_window().get_xid()
-    self.server=subprocess.Popen(['Xephyr',self.display,'-parent',str(xid),'-screen',f'{width}x{height}','-resizeable','-no-host-grab','-nolisten','tcp','-auth',str(auth),'-noreset','-title','TSMA Kit'],stdout=self.log,stderr=subprocess.STDOUT)
+    self.server=subprocess.Popen(['Xephyr',self.display,'-parent',str(xid),'-screen',f'{width}x{height}','-resizeable','-no-host-grab','-nolisten','tcp','-auth',str(auth),'-noreset','-title','TSMega-kit'],stdout=self.log,stderr=subprocess.STDOUT)
     self.env=os.environ.copy();self.env.update(DISPLAY=self.display,XAUTHORITY=str(auth),GDK_BACKEND='x11')
     deadline=time.monotonic()+4
     while time.monotonic()<deadline and self.server.poll() is None:
@@ -206,7 +206,7 @@ class Container:
      time.sleep(.1)
     else:raise RuntimeError('Gestore delle finestre non pronto')
     children=call(['xwininfo','-id',str(xid),'-children']).stdout
-    peer=re.search(r'(?m)^\s+(0x[0-9a-fA-F]+) "TSMA Kit":',children)
+    peer=re.search(r'(?m)^\s+(0x[0-9a-fA-F]+) "TSMega-kit":',children)
     if peer:
      peer_id=int(peer[1],16)
      self.peer=GdkX11.X11Window.foreign_new_for_display(Gdk.Display.get_default(),peer_id)
@@ -270,7 +270,7 @@ class Container:
   if self.drums_process is not None:self.drums_process.terminate()
   if self.ready:
    # Close gracefully while X is still alive so application settings can save.
-   subprocess.run(['systemctl','--user','stop','tsma-tonelib.service','tsma-looper-gui.service','tsma-kit.service'],timeout=20)
+   subprocess.run(['systemctl','--user','stop','tsma-tonelib.service','tsma-looper-gui.service','tsmega-kit.service'],timeout=20)
    subprocess.run(['systemctl','--user','stop','jack-tsmega.service','tsma-jack-drivers.service'],timeout=15,stderr=subprocess.DEVNULL)
   for child in (self.wm,self.server):
    if child is not None and child.poll() is None:

@@ -1,9 +1,7 @@
 name: Build release packages
 on:
-  push:
-    branches: [main]
-    paths: [VERSION, .github/workflows/release.yml]
   workflow_dispatch:
+
 permissions:
   contents: write
 concurrency:
@@ -21,8 +19,8 @@ jobs:
         run: gh release edit v1.0.0 --draft || true
       - name: Build the portable runtime and native installers with SVG support
         run: |
-          docker build -f packaging/Dockerfile.bundle -t tsma-kit-builder .
-          docker run --rm -v "$PWD:/src" tsma-kit-builder bash -e -c '
+          docker build -f packaging/Dockerfile.bundle -t tsmega-kit-builder .
+          docker run --rm -v "$PWD:/src" tsmega-kit-builder bash -e -c '
             python3 -m unittest discover -s tests -q
             python3 -m unittest discover -s config/Jack/Drivers.d/tests -q
             python3 packaging/build_dsp.py
@@ -32,7 +30,7 @@ jobs:
             curl -fL https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage -o .cache-build/appimagetool.AppImage
             chmod +x .cache-build/appimagetool.AppImage
             version=$(cat VERSION)
-            ARCH=x86_64 .cache-build/appimagetool.AppImage --appimage-extract-and-run --no-appstream dist/TSMA-Kit.AppDir dist/TSMA-Kit-$version-x86_64.AppImage
+            ARCH=x86_64 .cache-build/appimagetool.AppImage --appimage-extract-and-run --no-appstream dist/TSMega-kit.AppDir dist/TSMega-kit-$version-x86_64.AppImage
             python3 packaging/build_native.py
             sed -i "s/^# deb-src /deb-src /" /etc/apt/sources.list
             apt-get update -qq
@@ -42,14 +40,14 @@ jobs:
       - name: Verify final artifacts
         run: |
           version=$(cat VERSION)
-          dist/TSMA-Kit-$version-x86_64.AppImage --appimage-extract-and-run --self-test
-          dpkg-deb --info dist/tsma-kit_${version}_amd64.deb
+          dist/TSMega-kit-$version-x86_64.AppImage --appimage-extract-and-run --self-test
+          dpkg-deb --info dist/tsmega-kit_${version}_amd64.deb
           cd dist
-          sha256sum TSMA-Kit-$version-x86_64.AppImage tsma-kit_${version}_amd64.deb tsma-kit-$version-1.x86_64.rpm TSMA-Kit-$version-runtime-sources.tar.gz > SHA256SUMS
+          sha256sum TSMega-kit-$version-x86_64.AppImage tsmega-kit_${version}_amd64.deb tsmega-kit-$version-1.x86_64.rpm TSMega-kit-$version-runtime-sources.tar.gz > SHA256SUMS
       - name: Publish packages and matching runtime sources
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           version=$(cat VERSION)
-          gh release view v$version >/dev/null 2>&1 || gh release create v$version --verify-tag --title "TSMA Kit $version" --notes-file packaging/release-notes.md
-          gh release upload v$version dist/TSMA-Kit-$version-x86_64.AppImage dist/tsma-kit_${version}_amd64.deb dist/tsma-kit-$version-1.x86_64.rpm dist/SHA256SUMS dist/TSMA-Kit-$version-runtime-sources.tar.gz --clobber
+          gh release view v$version >/dev/null 2>&1 || gh release create v$version --verify-tag --title "TSMega-kit $version" --notes-file packaging/release-notes.md
+          gh release upload v$version dist/TSMega-kit-$version-x86_64.AppImage dist/tsmega-kit_${version}_amd64.deb dist/tsmega-kit-$version-1.x86_64.rpm dist/SHA256SUMS dist/TSMega-kit-$version-runtime-sources.tar.gz --clobber

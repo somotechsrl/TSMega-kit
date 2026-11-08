@@ -1,11 +1,11 @@
 #!/bin/bash
 set -e
 if [[ ${1:-} == --install-desktop ]]; then
-    exec /usr/bin/python3 /usr/share/tsma-kit/install-desktop.py
+    exec /usr/bin/python3 /usr/share/tsmega-kit/install-desktop.py
 fi
-image=/usr/lib/tsma-kit/TSMA-Kit.AppImage
-version=$(cat /usr/share/tsma-kit/VERSION)
-cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/tsma-kit/native-$version"
+image=/usr/lib/tsmega-kit/TSMega-kit.AppImage
+version=$(cat /usr/share/tsmega-kit/VERSION)
+cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/tsmega-kit/native-$version"
 mkdir -p -- "$cache_dir"
 (
     flock 9

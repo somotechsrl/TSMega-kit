@@ -10,13 +10,13 @@ def desktop_entry(root):
  def quote(s):return '"'+str(s).replace('\\','\\\\').replace('"','\\"').replace('`','\\`').replace('$','\\$').replace('%','%%')+'"'
  return f'''[Desktop Entry]
 Type=Application
-Name=TSMA Kit
+Name=TSMega-kit
 Comment=Chitarra · ToneLib GFX · SooperLooper
-Exec={quote(root/'start-tsma')}
+Exec={quote(root/'start-tsmega')}
 Icon={root/'icona.svg'}
 Terminal=false
 Categories=AudioVideo;Audio;
-StartupWMClass=TSMA-Kit
+StartupWMClass=TSMega-kit
 Actions=SalvaLoop;
 
 [Desktop Action SalvaLoop]
@@ -34,7 +34,7 @@ def main():
  if platform.machine() not in ('x86_64','amd64'):raise RuntimeError('ToneLib incluso richiede Linux x86_64; questo kit non supporta ARM.')
  print('Cartella:',ROOT)
  print('Profilo: preset ToneLib, comandi TS Mega/Chocolate, looper stereo 48 kHz.')
- print('Ardour resta separato. I profili ToneLib esistenti saranno prima copiati in ~/.local/share/tsma-kit/backups/.')
+ print('Ardour resta separato. I profili ToneLib esistenti saranno prima copiati in ~/.local/share/tsmega-kit/backups/.')
  if args.dry_run:
   print('Simulazione: installazione dipendenze, importazione profilo, compilazione MIDI e icona sul desktop.');return
  if not (ROOT/'vendor/ToneLib-GFX').is_file() and not shutil.which('ToneLib-GFX'):
@@ -63,12 +63,12 @@ def main():
  try:desktop=Path(subprocess.check_output(['xdg-user-dir','DESKTOP'],text=True).strip())
  except (OSError,subprocess.CalledProcessError):desktop=Path.home()/'Desktop'
  desktop.mkdir(parents=True,exist_ok=True)
- entry=desktop/'TSMA-Kit.desktop';entry.write_text(desktop_entry(ROOT));entry.chmod(0o755)
+ entry=desktop/'TSMega-kit.desktop';entry.write_text(desktop_entry(ROOT));entry.chmod(0o755)
  applications=Path.home()/'.local/share/applications';applications.mkdir(parents=True,exist_ok=True)
  shutil.copy2(entry,applications/entry.name)
  env=os.environ.copy();env.pop('GIO_MODULE_DIR',None)
  if shutil.which('gio'):subprocess.run(['gio','set',str(entry),'metadata::trusted','true'],env=env,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
- print('Pronto. Collega TS Mega e Chocolate, poi apri TSMA Kit dal desktop o esegui ./start-tsma.')
+ print('Pronto. Collega TS Mega e Chocolate, poi apri TSMega-kit dal desktop o esegui ./start-tsmega.')
 
 if __name__=='__main__':
  try:main()

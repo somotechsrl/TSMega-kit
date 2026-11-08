@@ -112,6 +112,6 @@ class PortableProfile(unittest.TestCase):
    (target/'old-marker').write_text('saved')
    install_profile(ROOT,home,force=True)
    self.assertEqual((target/'Shared/com.tonelib.gfx4.reginfo').read_text(),'existing activation')
-   self.assertEqual(len(list((home/'.local/share/tsma-kit/backups').glob('*/old-marker'))),1)
+   self.assertEqual(len(list((home/'.local/share/tsmega-kit/backups').glob('*/old-marker'))),1)
 
 if __name__=='__main__':unittest.main()
